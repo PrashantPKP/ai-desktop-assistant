@@ -1,67 +1,84 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
 
 
 class ModelSelector:
+    """
+    Model selection panel with dropdown and model info display.
+    """
+
     def __init__(self, parent, models):
         self.models = models
 
-        self.frame = tk.LabelFrame(
-            parent,
-            text="🤖 AI Model",
-            padx=10,
-            pady=10
+        # Container
+        self.frame = ctk.CTkFrame(parent, corner_radius=12)
+
+        # Header
+        header = ctk.CTkLabel(
+            self.frame,
+            text="🤖  AI Model",
+            font=ctk.CTkFont(size=14, weight="bold"),
+            anchor="w"
+        )
+        header.pack(
+            fill="x",
+            padx=16,
+            pady=(12, 8)
+        )
+
+        # Content row
+        content_row = ctk.CTkFrame(
+            self.frame,
+            fg_color="transparent"
+        )
+        content_row.pack(
+            fill="x",
+            padx=16,
+            pady=(0, 12)
         )
 
         # Dropdown
-        self.model_var = tk.StringVar()
+        model_names = [m["name"] for m in self.models] if self.models else ["No models"]
 
-        self.dropdown = ttk.Combobox(
-            self.frame,
-            textvariable=self.model_var,
-            state="readonly",
-            width=35
+        self.model_var = ctk.StringVar(value=model_names[0])
+
+        self.dropdown = ctk.CTkOptionMenu(
+            content_row,
+            variable=self.model_var,
+            values=model_names,
+            width=280,
+            height=36,
+            corner_radius=8,
+            font=ctk.CTkFont(size=13),
+            dropdown_font=ctk.CTkFont(size=12),
+            command=self._on_model_change
         )
+        self.dropdown.pack(side="left", padx=(0, 12))
 
-        self.dropdown["values"] = [
-            model["name"] for model in self.models
-        ]
-
-        if self.models:
-            self.dropdown.current(0)
-
-        self.dropdown.pack(fill="x")
-
-        # Model Information
-        self.info = tk.Label(
-            self.frame,
-            anchor="w",
-            justify="left",
-            padx=2,
-            pady=8
+        # Model info badge
+        self.info_label = ctk.CTkLabel(
+            content_row,
+            text="",
+            font=ctk.CTkFont(size=12),
+            text_color=("gray40", "gray60"),
+            anchor="w"
         )
+        self.info_label.pack(side="left", fill="x", expand=True)
 
-        self.info.pack(fill="x")
+        self._update_info()
 
-        self.dropdown.bind(
-            "<<ComboboxSelected>>",
-            self.update_info
-        )
+    def _on_model_change(self, value):
+        self._update_info()
 
-        self.update_info()
-
-    def update_info(self, event=None):
-        model = self.get_selected_model()
+    def _update_info(self):
+        model_name = self.model_var.get()
 
         for item in self.models:
-            if item["name"] == model:
-                self.info.config(
-                    text=(
-                        f"Type : {item['type']}\n"
-                        f"Size : {item['size']}"
-                    )
-                )
-                break
+            if item["name"] == model_name:
+                info_text = f"⚡ {item['type']}  •  📦 {item['size']}"
+                self.info_label.configure(text=info_text)
+                return
+
+        self.info_label.configure(text="")
 
     def get_selected_model(self):
         return self.model_var.get()
