@@ -24,3 +24,16 @@ class TaskRunner:
             target=worker,
             daemon=True
         ).start()
+
+    @staticmethod
+    def run_simple(task):
+        """
+        Run a task in a background thread without
+        success/error callbacks (for streaming tasks
+        that handle their own callbacks).
+        """
+
+        threading.Thread(
+            target=task,
+            daemon=True
+        ).start()

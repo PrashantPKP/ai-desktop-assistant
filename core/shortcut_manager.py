@@ -1,10 +1,12 @@
 import threading
 import keyboard
+from core.settings_manager import SettingsManager
 
 
 class ShortcutManager:
     def __init__(self):
-        self.shortcut = "ctrl+shift+a"
+        settings = SettingsManager()
+        self.shortcut = settings.get("shortcut", "ctrl+shift+a")
         self.callback = None
 
     def set_callback(self, callback):

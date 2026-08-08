@@ -21,6 +21,8 @@ class AssistantController:
         on_success,
         on_error=None
     ):
+        """Non-streaming AI request (fallback)."""
+
         def task():
             prompt = self.prompt_engine.build_prompt(
                 selected_text,
@@ -37,3 +39,36 @@ class AssistantController:
             on_success=on_success,
             on_error=on_error
         )
+
+    def ask_ai_stream(
+        self,
+        model,
+        selected_text,
+        user_prompt,
+        on_token,
+        on_done,
+        on_error
+    ):
+        """Streaming AI request — tokens arrive in real-time."""
+
+        def task():
+            prompt = self.prompt_engine.build_prompt(
+                selected_text,
+                user_prompt
+            )
+
+            self.ollama.generate_stream(
+                model=model,
+                prompt=prompt,
+                on_token=on_token,
+                on_done=on_done,
+                on_error=on_error
+            )
+
+        TaskRunner.run_simple(task)
+
+    def copy_to_clipboard(self, text):
+        self.clipboard.copy_to_clipboard(text)
+
+    def check_ollama(self):
+        return self.ollama.check_connection()
