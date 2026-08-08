@@ -1,0 +1,22 @@
+[
+    {
+        "name": "qwen2.5:3b",
+        "type": "General Chat",
+        "size": "1.9 GB"
+    },
+    {
+        "name": "phi3:latest",
+        "type": "Reasoning",
+        "size": "2.2 GB"
+    },
+    {
+        "name": "llama3.2:3b",
+        "type": "General Chat",
+        "size": "2.0 GB"
+    },
+    {
+        "name": "gemma2:2b",
+        "type": "Fast & Lightweight",
+        "size": "1.6 GB"
+    }
+]

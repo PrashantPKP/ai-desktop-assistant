@@ -1,0 +1,22 @@
+{
+    "window": {
+        "width": 900,
+        "height": 700,
+        "min_width": 700,
+        "min_height": 500
+    },
+
+    "shortcut": "ctrl+shift+a",
+
+    "default_model": "qwen2.5:3b",
+
+    "theme": "light",
+
+    "restore_clipboard": true,
+
+    "show_selected_text_lines": 7,
+
+    "ollama": {
+        "host": "http://localhost:11434"
+    }
+}
