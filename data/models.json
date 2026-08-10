@@ -2,21 +2,68 @@
     {
         "name": "qwen2.5:3b",
         "type": "General Chat",
-        "size": "1.9 GB"
+        "size": "1.9 GB",
+        "provider": "ollama"
     },
     {
-        "name": "phi3:latest",
-        "type": "Reasoning",
-        "size": "2.2 GB"
+        "name": "qwen2.5-coder:3b",
+        "type": "Code Generation",
+        "size": "1.9 GB",
+        "provider": "ollama"
     },
     {
-        "name": "llama3.2:3b",
-        "type": "General Chat",
-        "size": "2.0 GB"
+        "name": "qwen3:8b",
+        "type": "Advanced Reasoning",
+        "size": "5.2 GB",
+        "provider": "ollama"
     },
     {
-        "name": "gemma2:2b",
-        "type": "Fast & Lightweight",
-        "size": "1.6 GB"
+        "name": "gemma4:26b",
+        "type": "Most Capable (Local)",
+        "size": "17 GB",
+        "provider": "ollama"
+    },
+    {
+        "name": "qwen3-vl:8b",
+        "type": "Vision + Language",
+        "size": "6.1 GB",
+        "provider": "ollama",
+        "supports_images": true
+    },
+    {
+        "name": "gpt-4o-mini",
+        "type": "Fast & Smart",
+        "size": "Cloud",
+        "provider": "openai"
+    },
+    {
+        "name": "gpt-4o",
+        "type": "Most Capable",
+        "size": "Cloud",
+        "provider": "openai"
+    },
+    {
+        "name": "gpt-3.5-turbo",
+        "type": "Fast & Affordable",
+        "size": "Cloud",
+        "provider": "openai"
+    },
+    {
+        "name": "gemini-2.0-flash",
+        "type": "Fast & Free",
+        "size": "Cloud",
+        "provider": "gemini"
+    },
+    {
+        "name": "gemini-1.5-pro",
+        "type": "Most Capable",
+        "size": "Cloud",
+        "provider": "gemini"
+    },
+    {
+        "name": "gemini-1.5-flash",
+        "type": "Balanced",
+        "size": "Cloud",
+        "provider": "gemini"
     }
 ]
