@@ -2,7 +2,7 @@
 
 # 🤖 AI Desktop Assistant
 
-**A modern, chat-style AI desktop application with multi-provider support, persistent chat history, and global text capture — running right from your system tray.**
+**A modern, chat-style AI desktop application with multi-provider support, persistent chat history, and global text capture - running right from your system tray.**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)](https://python.org)
 [![CustomTkinter](https://img.shields.io/badge/UI-CustomTkinter-informational)](https://github.com/TomSchimansky/CustomTkinter)
@@ -16,34 +16,76 @@
 
 ## 📖 Overview
 
-AI Desktop Assistant is a **Python-based desktop application** that brings the power of local and cloud AI models to your fingertips — no browser needed. It lives quietly in your **system tray** and pops up on demand with a global keyboard shortcut. You can chat with it, capture selected text from any application, attach files and images, and browse your full conversation history — all in a clean, ChatGPT-inspired interface.
+AI Desktop Assistant is a **Python-based desktop application** that brings the power of local and cloud AI models to your fingertips - no browser needed. It lives quietly in your **system tray** and pops up on demand with a global keyboard shortcut. You can chat with it, capture selected text from any application, attach files and images, and browse your full conversation history - all in a clean, ChatGPT-inspired interface.
 
 ---
+
+## 🛠️ Technologies Used
+
+### Core Language
+| Technology | Version | Purpose |
+|---|---|---|
+| **Python** | 3.10+ | Primary language for the entire application |
+
+### UI Framework
+| Library | Purpose |
+|---|---|
+| **CustomTkinter** | Modern, themeable GUI framework built on top of Tkinter |
+| **Tkinter** (built-in) | Base widget toolkit - used for Text widgets with rich tag-based formatting |
+
+### AI & API Clients
+| Library | Purpose |
+|---|---|
+| **Requests** | HTTP client for communicating with Ollama, OpenAI, and Gemini REST APIs |
+| **python-dotenv** | Securely loads API keys from the `.env` file |
+
+### System Integration
+| Library | Purpose |
+|---|---|
+| **Keyboard** | Registers the global `Ctrl+Shift+A` hotkey system-wide |
+| **Pyperclip** | Reads the currently selected text from the system clipboard |
+| **Pystray** | Creates and manages the system tray icon and its context menu |
+| **Pillow (PIL)** | Handles image loading for the tray icon |
+
+### Data & Storage
+| Library | Purpose |
+|---|---|
+| **JSON** (built-in) | Stores chat history and model definitions |
+| **Pathlib** (built-in) | Cross-platform file path management |
+| **UUID** (built-in) | Generates unique IDs for each chat session |
+| **Base64** (built-in) | Encodes images for vision model requests |
+
+### Concurrency
+| Library | Purpose |
+|---|---|
+| **Threading** (built-in) | Runs AI requests in background threads to keep the UI responsive |
+
+
 
 ## ✨ Features
 
 ### 💬 Chat Interface
-- **ChatGPT-style layout** — user messages on the right (blue bubbles), AI responses on the left.
-- **Streaming responses** — tokens appear word by word as the AI generates them.
+- **ChatGPT-style layout** - user messages on the right (blue bubbles), AI responses on the left.
+- **Streaming responses** - tokens appear word by word as the AI generates them.
 - **Animated loading indicator** (● ○ ○) while waiting for the first token.
-- **Markdown rendering** — bold, italic, inline code, headings, numbered & bulleted lists.
-- **Syntax-highlighted code blocks** — VS Code-style dark theme with keyword colouring for Python (blue keywords, orange strings, green comments, purple builtins).
-- **Copy buttons** — individual 📋 Copy code, 📋 Copy table, and 📋 Copy all buttons on every response.
+- **Markdown rendering** - bold, italic, inline code, headings, numbered & bulleted lists.
+- **Syntax-highlighted code blocks** - VS Code-style dark theme with keyword colouring for Python (blue keywords, orange strings, green comments, purple builtins).
+- **Copy buttons** - individual 📋 Copy code, 📋 Copy table, and 📋 Copy all buttons on every response.
 
 ### 🌐 Multi-Provider AI
 - **Three backends** supported out of the box: Ollama (local), OpenAI, and Google Gemini.
-- **Automatic routing** — the correct client is used based on the selected model's provider.
+- **Automatic routing** - the correct client is used based on the selected model's provider.
 - **Model dropdown** with provider badges: 💻 Local, ☁️ OpenAI, ✦ Gemini.
 
 ### 🔑 Global Shortcut & Context Capture
-- **`Ctrl+Shift+A`** — works from anywhere on your system while the app runs in the background.
+- **`Ctrl+Shift+A`** - works from anywhere on your system while the app runs in the background.
 - Captures the currently **selected text** in any application and pre-loads it as context in the input bar.
 - The window is brought to the foreground reliably using Win32 API.
 
 ### 🗂️ Chat History & Sidebar
 - **Collapsible sidebar** (click ☰ to show/hide) lists all previous conversations.
 - **＋ New Chat** button starts a fresh session at any time.
-- **Auto-titling** — the first user message becomes the chat title automatically.
+- **Auto-titling** - the first user message becomes the chat title automatically.
 - **Rename** (✏️) and **Delete** (🗑) any chat inline.
 - **Click any chat** to fully reload and replay the conversation in the chat area.
 - All chats are persisted as JSON files in the `user_data/chats/` folder.
@@ -55,9 +97,9 @@ AI Desktop Assistant is a **Python-based desktop application** that brings the p
 - Shows a preview card with filename and a ✕ remove button.
 
 ### 🎨 UI & Themes
-- **Light mode** (default) and **Dark mode** — toggle with the 🌙/☀️ button in the header.
+- **Light mode** (default) and **Dark mode** - toggle with the 🌙/☀️ button in the header.
 - Built with **CustomTkinter** for a modern, anti-aliased look.
-- Fully responsive — the chat area expands to fill available space.
+- Fully responsive - the chat area expands to fill available space.
 
 ### ⚙️ Ollama Integration
 - **Connection status indicator** (🟢 Connected / 🔴 Offline) shown in the header.
@@ -169,3 +211,52 @@ python main.py
     <td><a href="https://github.com/PrashantPKP/ai-desktop-assistant.git">ai-desktop-assistant</a></td>
   </tr>
 </table>
+
+
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome and appreciated! Here's how you can help:
+
+1. **Fork** the repository
+2. **Create a branch** for your feature or fix:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Make your changes** and commit with a clear message:
+   ```bash
+   git commit -m "Add: brief description of what you did"
+   ```
+4. **Push** to your fork:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+5. **Open a Pull Request** on GitHub and describe what you've changed
+
+### 💡 Ideas for Contributions
+- Support for more AI providers (Anthropic Claude, Cohere, etc.)
+- PDF content extraction and sending to AI
+- Voice input / text-to-speech output
+- Conversation export (PDF / Markdown)
+- Custom system prompt editor
+- Plugin system for quick-action prompts
+
+> Please keep pull requests focused on a single feature or fix. For major changes, open an issue first to discuss the idea.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+
+<div align="center">
+
+Made with ❤️ by [Prashant Parshuramkar](https://github.com/PrashantPKP)
+
+⭐ If you found this project useful, please consider giving it a star on GitHub!
+
+</div>
+
