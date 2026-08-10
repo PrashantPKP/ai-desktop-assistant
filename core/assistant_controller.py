@@ -1,6 +1,9 @@
 from core.clipboard import ClipboardManager
 from core.prompt_engine import PromptEngine
 from core.ollama_client import OllamaClient
+from core.openai_client import OpenAIClient
+from core.gemini_client import GeminiClient
+from core.model_manager import ModelManager
 from core.task_runner import TaskRunner
 
 
@@ -8,7 +11,21 @@ class AssistantController:
     def __init__(self):
         self.clipboard = ClipboardManager()
         self.prompt_engine = PromptEngine()
+        self.model_manager = ModelManager()
         self.ollama = OllamaClient()
+        self.openai = OpenAIClient()
+        self.gemini = GeminiClient()
+
+    def _get_client(self, model_name):
+        """Return the correct client based on the model's provider."""
+        model = self.model_manager.get_model(model_name)
+        provider = model.get("provider", "ollama") if model else "ollama"
+
+        if provider == "openai":
+            return self.openai
+        if provider == "gemini":
+            return self.gemini
+        return self.ollama
 
     def get_selected_text(self):
         return self.clipboard.get_selected_text()
@@ -29,7 +46,8 @@ class AssistantController:
                 user_prompt
             )
 
-            return self.ollama.generate(
+            client = self._get_client(model)
+            return client.generate(
                 model=model,
                 prompt=prompt
             )
@@ -47,9 +65,10 @@ class AssistantController:
         user_prompt,
         on_token,
         on_done,
-        on_error
+        on_error,
+        images=None
     ):
-        """Streaming AI request — tokens arrive in real-time."""
+        """Streaming AI request — routes to correct provider."""
 
         def task():
             prompt = self.prompt_engine.build_prompt(
@@ -57,13 +76,17 @@ class AssistantController:
                 user_prompt
             )
 
-            self.ollama.generate_stream(
-                model=model,
-                prompt=prompt,
-                on_token=on_token,
-                on_done=on_done,
-                on_error=on_error
-            )
+            client = self._get_client(model)
+            kwargs = {
+                "model": model,
+                "prompt": prompt,
+                "on_token": on_token,
+                "on_done": on_done,
+                "on_error": on_error
+            }
+            if images:
+                kwargs["images"] = images
+            client.generate_stream(**kwargs)
 
         TaskRunner.run_simple(task)
 
@@ -72,3 +95,6 @@ class AssistantController:
 
     def check_ollama(self):
         return self.ollama.check_connection()
+
+    def start_ollama(self):
+        return self.ollama.start_ollama()

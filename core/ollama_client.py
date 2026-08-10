@@ -56,7 +56,8 @@ class OllamaClient:
                 "response": f"Error: {e}"
             }
 
-    def generate_stream(self, model, prompt, on_token, on_done, on_error):
+    def generate_stream(self, model, prompt, on_token, on_done, on_error,
+                         images=None):
         """
         Stream response from Ollama token-by-token.
 
@@ -66,16 +67,21 @@ class OllamaClient:
             on_token: Callback(token_text) called for each token
             on_done: Callback(full_response) called when complete
             on_error: Callback(error_message) called on error
+            images: Optional list of base64-encoded image strings
         """
 
         try:
+            body = {
+                "model": model,
+                "prompt": prompt,
+                "stream": True
+            }
+            if images:
+                body["images"] = images
+
             response = requests.post(
                 self.generate_url,
-                json={
-                    "model": model,
-                    "prompt": prompt,
-                    "stream": True
-                },
+                json=body,
                 stream=True,
                 timeout=300
             )
@@ -136,3 +142,53 @@ class OllamaClient:
             return [m["name"] for m in data.get("models", [])]
         except Exception:
             return []
+
+    def start_ollama(self):
+        """
+        Attempt to start the Ollama service on Windows.
+        Tries 'ollama serve' first, falls back to launching
+        the Ollama desktop app.
+        Returns: (success: bool, message: str)
+        """
+        import subprocess
+        import shutil
+        import time
+
+        # Check if 'ollama' command is available
+        ollama_path = shutil.which("ollama")
+
+        if ollama_path:
+            try:
+                # Start 'ollama serve' as a detached background process
+                subprocess.Popen(
+                    ["ollama", "serve"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    creationflags=subprocess.CREATE_NO_WINDOW
+                        | subprocess.DETACHED_PROCESS
+                )
+
+                # Wait a moment and check if it came online
+                for _ in range(6):
+                    time.sleep(1)
+                    if self.check_connection():
+                        return True, "Ollama started successfully!"
+
+                return False, "Ollama process started but not responding yet. Try again."
+
+            except Exception as e:
+                return False, f"Failed to start Ollama: {e}"
+        else:
+            # Try launching Ollama desktop app via Windows start menu
+            try:
+                import os
+                os.startfile("ollama")
+                time.sleep(3)
+                if self.check_connection():
+                    return True, "Ollama app launched!"
+                return False, "Ollama app launched. Waiting for it to be ready..."
+            except Exception:
+                return False, (
+                    "Ollama is not installed.\n"
+                    "Download it from https://ollama.com"
+                )
